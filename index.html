@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Profunda (AS-IS) | Leila - Casa Goianita</title>
+    
+    <!-- Fontes (Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Ícones (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =========================================
+           1. TOKENS E BASE (Brand Core - Live V3)
+           ========================================= */
+        :root {
+            /* Paleta Principal */
+            --primary-bg: #06192a;      /* Azul Petróleo */
+            --card-bg: #0A243D;         /* Azul Escuro */
+            --accent-color: #00e800;    /* Verde Vibrante */
+            --danger-color: #ff4d4d;    /* Vermelho Alerta */
+            --info-color: #00d2ff;      /* Azul Info */
+            --warning-color: #ffbb00;   /* Amarelo Alerta */
+            
+            /* Textos */
+            --text-primary: #ffffff;
+            --text-muted: #cccccc;
+            --text-subtle: #a0a0a0;
+            
+            /* Bordas e Efeitos */
+            --border-color: rgba(255, 255, 255, 0.1);
+            --accent-glow: 0 0 8px rgba(0, 232, 0, 0.7);
+            
+            /* Tipografia */
+            --font-primary: 'Poppins', sans-serif;
+            --font-secondary: 'Merriweather', serif; /* Para Citações e Diagnóstico */
+            
+            /* Espaçamento */
+            --space-sm: 1rem;
+            --space-md: 2rem;
+            --space-lg: 4rem;
+            --space-xl: 6rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            background-attachment: fixed;
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            margin-bottom: var(--space-md);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+            margin-top: var(--space-lg);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* Quote Style */
+        blockquote {
+            font-family: var(--font-secondary);
+            font-style: italic;
+            border-left: 3px solid var(--danger-color);
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #fff;
+            background: rgba(255, 77, 77, 0.05);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        blockquote span {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-subtle);
+            margin-top: 10px;
+            font-family: var(--font-primary);
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        /* =========================================
+           2. LAYOUT
+           ========================================= */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: rgba(6, 25, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        header img {
+            height: 40px;
+            width: auto;
+        }
+
+        main {
+            padding-top: 120px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: var(--space-sm);
+            padding-right: var(--space-sm);
+            padding-bottom: var(--space-xl);
+        }
+
+        /* =========================================
+           3. COMPONENTES
+           ========================================= */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: var(--space-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: var(--space-sm);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .card-alert {
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            background: linear-gradient(180deg, rgba(10, 36, 61, 1) 0%, rgba(40, 10, 10, 0.4) 100%);
+        }
+        
+        .card-warning {
+            border: 1px solid rgba(255, 187, 0, 0.3);
+            background: linear-gradient(180deg, rgba(10, 36, 61, 1) 0%, rgba(40, 30, 10, 0.4) 100%);
+        }
+
+        /* Disclaimer Box */
+        .disclaimer-box {
+            background-color: rgba(0, 210, 255, 0.05);
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            border-left: 4px solid var(--info-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 40px auto;
+            max-width: 900px;
+            text-align: left;
+        }
+        
+        .disclaimer-title {
+            color: var(--info-color);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Grids */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-md);
+        }
+
+        @media (min-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-md);
+        }
+
+        @media (min-width: 768px) {
+            .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .badge-danger { background: rgba(255, 77, 77, 0.2); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.3); }
+        .badge-warning { background: rgba(255, 187, 0, 0.2); color: #ffbb00; border: 1px solid rgba(255, 187, 0, 0.3); }
+        .badge-success { background: rgba(0, 232, 0, 0.1); color: var(--accent-color); border: 1px solid rgba(0, 232, 0, 0.2); }
+        .badge-info { background: rgba(0, 150, 255, 0.1); color: #0096ff; border: 1px solid rgba(0, 150, 255, 0.2); }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            margin: 40px 0;
+            padding-left: 30px;
+            border-left: 2px solid var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            opacity: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .timeline-meta {
+            font-size: 0.85rem;
+            color: var(--text-subtle);
+            margin-bottom: 10px;
+            font-family: monospace;
+        }
+
+        /* Hero */
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+        .hero-subtitle {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #030c14;
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        footer img {
+            height: 30px; /* Reduzido */
+            margin-bottom: 15px;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+        
+        footer img:hover { opacity: 1; }
+        footer p { font-size: 0.8rem; margin: 0; }
+
+        /* Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Botão de Gravação */
+        .btn-recording {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            margin-top: 20px;
+            font-weight: 600;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .btn-recording:hover {
+            background-color: var(--accent-color);
+            color: #000;
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://raw.githubusercontent.com/Clebito2/layout/main/Logo%20live%20oficial-36.png" alt="Live Consultoria">
+    </header>
+
+    <main>
+        
+        <!-- HERO -->
+        <section class="fade-in" style="text-align: center; padding: 60px 0;">
+            <p class="hero-subtitle">Casa Goianita</p>
+            <h1 class="hero-title">Análise Profunda de Cargo <br> <span style="color: var(--accent-color);">(AS-IS)</span></h1>
+            
+            <!-- BLOCO DE CONTEXTO E CONFIDENCIALIDADE -->
+            <div class="disclaimer-box fade-in">
+                <div class="disclaimer-title">
+                    <i class="fas fa-shield-halved"></i> Contexto & Confidencialidade
+                </div>
+                <p style="margin-bottom: 0; color: #e0e0e0; font-size: 0.95rem; line-height: 1.6;">
+                    Este documento mapeia a função da colaboradora <strong>Leila</strong> (30 anos de casa), identificando gargalos operacionais e culturais. <br><br>
+                    O conteúdo reflete a percepção real e sem filtros da colaboradora, sob garantia de sigilo. As informações aqui contidas são confidenciais e não devem ser utilizadas para outros fins.
+                </p>
+            </div>
+        </section>
+
+        <!-- 1. DIAGNÓSTICO DA FUNÇÃO -->
+        <section class="fade-in">
+            <h2>1. O Fator Humano: Lealdade e Desgaste</h2>
+            <p>Leila atua como uma "Sintetizadora Manual" das vontades dos sócios. Com 30 anos de empresa, ela vive o luto de ver a decadência do negócio e a sobrecarga de uma equipe reduzida.</p>
+            
+            <div class="grid-2">
+                <!-- Card: Mediação de Conflitos (Alterado) -->
+                <div class="card card-warning">
+                    <span class="badge badge-warning">Mediação de Conflitos</span>
+                    <h3>Gestão de Clima e Relacionamento</h3>
+                    <p>A colaboradora relatou ter ouvido, ao longo dos anos, diversas reclamações de funcionários sobre a forma como eram tratados pela gestão.</p>
+                    <p>Ela descreve seu papel como uma mediadora que atuou ativamente para acalmar ânimos, impedir brigas e evitar processos trabalhistas, agindo muitas vezes como um ponto de equilíbrio para a equipe.</p>
+                </div>
+
+                <!-- Card: Desmotivação -->
+                <div class="card">
+                    <span class="badge badge-warning">Clima Organizacional</span>
+                    <h3>A Dor do Declínio</h3>
+                    <p>Leila expressa uma conexão emocional profunda com a empresa, o que torna o declínio administrativo ainda mais doloroso para ela.</p>
+                    <blockquote>
+                        "Me doeu o coração... Às vezes eu me emociono porque quando eu entrei aqui, dezembro vendia 2 milhões... Hoje, ver a loja nessa situação mata."
+                    </blockquote>
+                    <blockquote>
+                        "Nem feliz Natal você ganha... nem muito obrigado pelo ano que passou." <br><span>— Sobre a reclamação dos vendedores</span>
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. MAPEAMENTO DE ROTINAS (TIMELINE) -->
+        <section class="fade-in">
+            <h2>2. A Burocracia da Desconfiança (Rotinas)</h2>
+            <p>A rotina da Leila é desenhada para suprir a falta de integração sistêmica e a desconfiança/controle manual dos donos (Seu Carlos e Cláudia).</p>
+
+            <div class="timeline">
+                
+                <!-- Processo: Planilhas do Carlos -->
+                <div class="timeline-item fade-in">
+                    <span class="badge badge-info">Rotina Diária/Mensal</span>
+                    <h3 class="timeline-title">A Planilha do "Seu Carlos"</h3>
+                    <div class="timeline-meta">Ferramentas: Papel (Fechamento Caixa) -> Excel -> Impressão</div>
+                    <div class="card">
+                        <p>Trabalho manual e repetitivo para satisfazer o controle pessoal do dono.</p>
+                        <ul style="padding-left: 20px; color: var(--text-muted);">
+                            <li><strong>Entrada Manual:</strong> Recebe o fechamento de caixa físico (papel) da Giovana e digita linha por linha em uma planilha.</li>
+                            <li><strong>Lançamento de Despesas:</strong> Pega os extratos bancários (riscados pela Érica) e lança despesa por despesa na planilha.</li>
+                            <li><strong>Motivo:</strong> "Ele gosta de planilha, de coisa manual... Ele tem um controle diário, mas exige esse fechamento no final do mês."</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Processo: Planilhas da Cláudia -->
+                <div class="timeline-item fade-in">
+                    <span class="badge badge-info">Redundância</span>
+                    <h3 class="timeline-title">A Planilha da Cláudia (Cartões)</h3>
+                    <div class="timeline-meta">Ferramentas: Site da Cielo, Extrato Banco, Excel</div>
+                    <div class="card">
+                        <p>Leila executa um processo financeiro paralelo (conciliação) porque a loja não tem sistema conciliador.</p>
+                        <ul style="padding-left: 20px; color: var(--text-muted);">
+                            <li><strong>Processo Diferente:</strong> "Pra Cláudia eu fecho diferente do Seu Carlos... Ela quer saber o saldo acumulado, o que entrou e o que saiu de taxas."</li>
+                            <li><strong>Conferência Visual:</strong> Entra no site da Cielo/Rede, puxa relatório e bate com o extrato bancário visualmente.</li>
+                            <li style="border-left: 2px solid var(--danger-color); padding-left: 10px; margin-top: 10px;">
+                                <em>"É muito serviço repetido. A gente faz planilha de venda pro Carlos, planilha de cartão pra Cláudia."</em>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Processo: RH e Comissões -->
+                <div class="timeline-item fade-in">
+                    <span class="badge badge-warning">Complexidade Desnecessária</span>
+                    <h3 class="timeline-title">Cálculo de Comissões "Degradantes"</h3>
+                    <div class="timeline-meta">Ferramentas: Sistema, Excel Manual</div>
+                    <div class="card">
+                        <p>A regra de comissão é complexa e desmotivadora, exigindo cálculo manual e explicação constante.</p>
+                        <ul style="padding-left: 20px; color: var(--text-muted);">
+                            <li><strong>Regra:</strong> A comissão cai conforme o prazo de pagamento aumenta. <br>Venda à vista: 3% -> 15 dias: 2,78% -> 30 dias: 2,75%.</li>
+                            <li><strong>Contrato:</strong> Carteira assinada com valor fixo de R$ 24,00 (apenas pro forma), assustando novos funcionários. O resto é comissão pura (sem garantia real além do piso se não atingir).</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 3. SISTEMAS-SOMBRA E GAPS -->
+        <section class="fade-in">
+            <h2>3. GAPs Críticos e Riscos</h2>
+            
+            <div class="grid-3">
+                <!-- Gap 1 -->
+                <div class="card" style="border-top: 4px solid #ff4d4d;">
+                    <i class="fas fa-user-secret gap-icon" style="color: #ff4d4d; font-size: 2rem; margin-bottom: 10px;"></i>
+                    <h3>O "POP" Secreto</h3>
+                    <p>Existem Procedimentos Operacionais Padrão (POP) antigos, mas <strong>os funcionários não recebem cópia</strong>.</p>
+                    <p style="font-size: 0.9rem;">"O Dr. Alexandre [Advogado] não permite que a gente entregue a via pra eles. Eles leem e assinam, mas não levam."</p>
+                </div>
+
+                <!-- Gap 2 -->
+                <div class="card" style="border-top: 4px solid #ffbb00;">
+                    <i class="fas fa-users-slash gap-icon" style="color: #ffbb00; font-size: 2rem; margin-bottom: 10px;"></i>
+                    <h3>Sobrecarga da Equipe</h3>
+                    <p>Redução drástica de quadro sem automação.</p>
+                    <p style="font-size: 0.9rem;">"A loja tinha 140 funcionários e éramos 8 no escritório. Hoje somos 3 [Leila, Érica, Giovana] para fazer tudo."</p>
+                </div>
+
+                <!-- Gap 3 -->
+                <div class="card" style="border-top: 4px solid #ff4d4d;">
+                    <i class="fas fa-tags gap-icon" style="color: #ff4d4d; font-size: 2rem; margin-bottom: 10px;"></i>
+                    <h3>Precificação Arbitrária</h3>
+                    <p>Gargalo comercial grave relatado pelo RH (via reclamação dos vendedores).</p>
+                    <p style="font-size: 0.9rem;">"Sai da cabeça do Curuca. Compra por R$ 16 e bota R$ 130. Não entra na cabeça dele que não vai vender."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. RECOMENDAÇÕES TO-BE -->
+        <section class="fade-in">
+            <h2>4. Ações Imediatas (Sugestão)</h2>
+            <div class="grid-2">
+                <div class="card card-success">
+                    <span class="badge badge-success">Tecnologia</span>
+                    <h3>Automação Financeira</h3>
+                    <p>A implementação do sistema integrado (mencionado na entrevista) é urgente para eliminar as "Planilhas do Carlos" e a "Conciliação da Cláudia".</p>
+                    <p><strong>Meta:</strong> Eliminar a redigitação de dados que já existem no sistema.</p>
+                </div>
+
+                <div class="card card-warning">
+                    <span class="badge badge-warning">Pessoas</span>
+                    <h3>Transparência no RH</h3>
+                    <p>Revisão imediata da política de "documentos secretos".</p>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li>Criar processo de <strong>Integração (Onboarding)</strong> real.</li>
+                        <li>Entregar cópia do regimento interno e contrato para o funcionário (Segurança Jurídica real vem da clareza, não do segredo).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <img src="https://raw.githubusercontent.com/Clebito2/layout/main/Logo%20live%20oficial-34.png" alt="Live Consultoria">
+        <p style="margin-top: 10px;">Relatório Confidencial | Metodologia Live V3</p>
+    </footer>
+
+    <!-- Scripts de Animação -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const elements = document.querySelectorAll('.fade-in, .timeline-item, .disclaimer-box');
+            elements.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
